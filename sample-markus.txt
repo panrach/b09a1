@@ -1,0 +1,3 @@
+dijkstra,73
+hintonge,100
+hoarecha,76

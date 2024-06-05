@@ -1,0 +1,36 @@
+#!/bin/sh
+
+while getopts m:r:n: myflag ; do
+    case "$myflag" in
+    m)
+        markus=$OPTARG
+    ;;
+    r)
+        ro=$OPTARG
+    ;;
+    n)
+        n="$OPTARG"
+    ;;
+    *)
+    ;;
+    esac
+done
+
+# roster IS NOT sorted we need to sort it
+# markus is sorted by utorid 
+# ro is sorted by student id
+
+# check if the file is a markus file or a ro file by checking if markus exists or ro exists
+# if it is a markus file do student_grades="$(echo "$sorted_ro" | join -t',' -1 2 -2 1 -a 1 -a 2 - "$markus")"
+
+roster=$1
+
+sorted_ro=$(sort -t',' -k2,2 "$ro")
+student_grades="$(echo "$sorted_ro" | join -t',' -1 2 -2 1 -a 1 -a 2 - "$markus")"
+student_grades="$(echo "$student_grades" | sort -t',' -n -r -k4 -)"
+students_with_grades="$(echo "$student_grades" | grep -E '^[^,]+,[^,]+,[^,]+,[0-9]+$' - | cut -d ',' -f 3-4)"
+
+echo "$(echo "$students_with_grades" | head -n "$n" -)"
+
+
+# part b: use process substitution but on join

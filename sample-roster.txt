@@ -1,0 +1,4 @@
+1002005031,dijkstra,ewd@mail.utoronto.ca
+1000905416,hintonge,geoff@mail.utoronto.ca
+1031415044,hoarecha,tony@mail.utoronto.ca
+1001414214,trebla,albert@mail.utoronto.ca

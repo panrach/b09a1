@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      lang="en"
+      xml:lang="en"
+>
+<head>
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+<title>CSCB09 2024 Summer Assignment 1</title>
+<style type="text/css">
+h1, h2, h3 { color: blue; }
+dfn { font-style: normal; font-weight: bold; color: blue; }
+table { border-collapse: collapse; }
+th, td { border: 1px solid grey; padding: 0.2em 0.5em; }
+
+/* Code excerpts from loadable source files. */
+div.excerpt {
+  margin: 1em 0em 1em; /* top, left/right, bottom */
+}
+div.excerpt > span {
+  font-size: smaller;
+  background-color: #f0f0f0;
+  padding: 0.25em;
+}
+div.excerpt > pre {
+  background-color: #f0f0f0;
+  overflow: auto;
+  padding: 0.5em;
+  margin: 0px;
+}
+
+/* popup hidable table of contents, and the button to pop it up. */
+#tocdyn {
+  position: fixed;
+  width: 15em;
+  top: 0;
+  right: 0;
+  padding: 8px;
+  border-left: blue solid 1px;
+  border-bottom: blue solid 1px;
+  background-color: white;
+  color: black;
+  font-family: sans-serif;
+  visibility: hidden; /* initial value, to be overruled by javascript */
+}
+#tocbutton {
+  position: fixed;
+  top: 0;
+  right: 0;
+  opacity: 0.9;
+}
+#tocdyn > h1 {
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 0;
+}
+#tocdyn * {
+  text-align: left;
+}
+#tocdyn ul {
+  list-style-type: none;
+}
+#tocdyn > ul {
+  padding-left: 0;
+}
+#tocdyn > ul ul {
+  padding-left: 1em;
+}
+#tocdyn li {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+ul.task-list{list-style: none;}
+</style>
+<script type="text/javascript">
+function show_toc() {
+  document.getElementById("tocdyn").style.visibility = "visible";
+}
+function hide_toc() {
+  document.getElementById("tocdyn").style.visibility = "";
+}
+</script>
+</head>
+<body id="top">
+<header class="title">
+<h1 class="title">CSCB09 2024 Summer Assignment 1</h1>
+</header>
+<div id="tocbutton"><button type="button" onclick="show_toc();">Table of Contents</button></div>
+<nav id="tocdyn" role="doc-toc" onclick="hide_toc();">
+<p><a href="#top">Top</a></p>
+<ul>
+<li><a href="#congratulations-top-students">Congratulations Top
+Students!</a>
+<ul>
+<li><a href="#part-a">Part A</a></li>
+<li><a href="#part-b">Part B</a></li>
+</ul></li>
+</ul>
+</nav>
+<div class="line-block">Due: June 10 11:59PM<br />
+This assignment is worth 10% of the course grade.</div>
+<p>In this assignment, you will write a shell script that leverages
+standard Unix utilities to perform a simple but useful task that’s right
+up the alley of Unix shell scripting.</p>
+<p>As usual, you should aim for reasonably efficient algorithms and
+reasonably well-organized, well-factored, comprehensible code.</p>
+<p>Code correctness (mostly auto-marking) is worth 90% of the marks;
+code quality is worth 10%.</p>
+<h2 id="congratulations-top-students">Congratulations Top Students!</h2>
+<p>UTSC CMS wants to select top students and email them congratulation
+messages! You will write a shell script to help them.</p>
+<p>The input and output formats are:</p>
+<ul>
+<li><p>Student roster: A CSV file of student IDs, UTORids, and email
+addresses. It is not sorted. We assume uniqueness. Some students in this
+file may be absent in the mark files below; then they don’t have marks.
+All students in mark files are present in this file. <a
+href="sample-roster.txt">sample-roster.txt</a></p>
+<pre><code>1001414214,trebla,albert@mail.utoronto.ca
+1031415044,hoarecha,tony@mail.utoronto.ca
+1000905416,hintonge,geoff@mail.utoronto.ca
+1002005031,dijkstra,ewd@mail.utoronto.ca</code></pre></li>
+<li><p>MarkUs marks format: A CSV file of UTORids and marks
+(non-negative integers). We assume uniqueness. In part A, it is sorted
+by UTORid. In part B, it is not sorted. <a
+href="sample-markus.txt">sample-markus.txt</a></p>
+<pre><code>dijkstra,73
+hintonge,100
+hoarecha,76</code></pre></li>
+<li><p>RO (Registrar’s Office) marks format: A CSV file of student IDs
+and marks (non-negative integers). We assume uniqueness. In part A, it
+is sorted by student ID <em>alphabetically, not numerically</em>. In
+part B, it is not sorted. <a href="sample-ro.txt">sample-ro.txt</a></p>
+<pre><code>1000905416,100
+1002005031,73
+1031415044,76</code></pre></li>
+<li><p>Output format: Congratulation list: A CSV file of email addresses
+and marks, sorted by decreasing marks. We assume that different students
+have different marks. <a
+href="sample-stdout.txt">sample-stdout.txt</a></p>
+<pre><code>geoff@mail.utoronto.ca,100
+tony@mail.utoronto.ca,76</code></pre></li>
+</ul>
+<h3 id="part-a">Part A</h3>
+<p>Write a shell script <code>high-A</code> in basic <code>sh</code>
+that can be used as</p>
+<pre><code>sh high-A [OPTIONS] ROSTER MARKS</code></pre>
+<p>where <code>ROSTER</code> and <code>MARKS</code> are the filenames of
+a roster file and a mark file, respectively. There is no argument for
+the output filename—output to stdout.</p>
+<p>The options are:</p>
+<ul>
+<li><code>-m</code>: The <code>MARKS</code> file is in MarkUs
+format.</li>
+<li><code>-r</code>: The <code>MARKS</code> file is in RO format.</li>
+<li>Exactly one of <code>-m</code> xor <code>-r</code> is required.</li>
+<li><code>-n NUM</code>: Number of students to output for the
+congratulation list. Default to 5 if absent.</li>
+<li>You may ignore or error out on unrecognized options.</li>
+</ul>
+<p>Output the congratulation list of <code>NUM</code> highest-mark
+students. If there are not enough students, output everyone who has a
+mark.</p>
+<p>Auto-marking will stick to valid syntax and inputs. If you still like
+to be robust and handle invalid syntax, you may send error messages to
+stderr and/or exit with a non-zero exit code.</p>
+<p>You will need the help of these programs: <a
+href="https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html">sort</a>,
+<a
+href="https://www.gnu.org/software/coreutils/manual/html_node/join-invocation.html">join</a>,
+<a
+href="https://www.gnu.org/software/coreutils/manual/html_node/head-invocation.html">head</a>.
+You may not write your own loop to process student records. You may not
+use a program that fundamentally defines a whole different programming
+language (e.g., perl, awk).</p>
+<p>You will need to combine them by pipelining. You may not write
+“intermediate temporary” files or modify input files. Auto-marking will
+be under heavy lockdown in a docker container.</p>
+<p>Examples:</p>
+<pre><code>sh high-A -m -n 2 sample-roster.txt sample-markus.txt
+sh high-A -r -n 2 sample-roster.txt sample-ro.txt</code></pre>
+<p>Both should produce output identical to <a
+href="sample-stdout.txt">sample-stdout.txt</a>.</p>
+<h3 id="part-b">Part B</h3>
+<p>Write a shell script <code>high-B</code> in <code>bash</code> that
+can be used as</p>
+<pre><code>bash high-B [OPTIONS] ROSTER</code></pre>
+<p>where options and <code>ROSTER</code> are as in part A. But this
+time, the marks come from stdin, and not initially sorted.</p>
+<p>Output (to stdout) the congratulation list of <code>NUM</code>
+highest-mark students. If there are not enough students, output everyone
+who has a mark.</p>
+<p>Auto-marking will stick to valid syntax and inputs. If you still like
+to be robust and handle invalid syntax, you may send error messages to
+stderr and/or exit with a non-zero exit code.</p>
+<p>This time you need the help of <code>bash</code> process substitution
+(e.g., “<code>foo &lt;(bar)</code>”), in addition to pipelining. You may
+not write your own loop to process student records. You may not use a
+program that fundamentally defines a whole different programming
+language (e.g., perl, awk).</p>
+<p>You may not write “intermediate temporary” files or modify input
+files. Auto-marking will be under heavy lockdown in a docker
+container.</p>
+<p>Examples:</p>
+<pre><code>bash high-B -m -n 2 sample-roster.txt &lt; sample-markus.txt
+bash high-B -r -n 2 sample-roster.txt &lt; sample-ro.txt</code></pre>
+<p>Both should produce output identical to <a
+href="sample-stdout.txt">sample-stdout.txt</a>.</p>
+<p>You should also test with your own mark files that are unsorted or in
+random order.</p>
+</body>
+</html>
