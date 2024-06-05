@@ -7,10 +7,10 @@ n=5
 while getopts m:r:n: myflag ; do
     case "$myflag" in
     m)
-        markus="poo"
+        markus="true"
     ;;
     r)
-        ro="poo"
+        ro="true"
     ;;
     n)
         n="$OPTARG"
@@ -25,11 +25,11 @@ done
 shift $((OPTIND - 1))
 echo n "$n"
 
-if [ "$markus" = "poo" ]; then 
+if [ "$markus" = "true" ]; then 
     echo $markus=$2
 fi;
 
-if [ "$ro" = "poo" ]; then 
+if [ "$ro" = "true" ]; then 
     echo $ro=$2
 fi;
 
