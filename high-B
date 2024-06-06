@@ -1,16 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
 markus=""
 ro=""
-n=5
 
 while getopts mrn: myflag ; do
     case "$myflag" in
     m)
-        markus="true"
+        markus="$2"
     ;;
     r)
-        ro="true"
+        ro="$2"
     ;;
     n)
         n="$OPTARG"
