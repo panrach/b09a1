@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 
 markus=""
 ro=""
+n=5
 
 while getopts mrn: myflag ; do
     case "$myflag" in
     m)
-        markus="$2"
+        markus="true"
     ;;
     r)
-        ro="$2"
+        ro="true"
     ;;
     n)
         n="$OPTARG"
@@ -34,20 +35,15 @@ if [ "$markus" = "true" ]; then
     # markus file
     # sort by utorid
     # join both files by utorid
-    markus=$2
-    sorted_roster=$(sort -t',' -k2,2 "$roster")
-    student_grades="$(echo "$sorted_roster" | join -t',' -1 2 -2 1 -a 1 -a 2 - "$markus")"
+    student_grades="$( join -t',' -1 2 -2 1 -a 1 -a 2 <(sort -t',' -k2,2 "$roster") <(sort -t',' -k1,1 -))"
 fi;
 
 if [ "$ro" = "true" ]; then 
     # ro file
     # sort roster by student id
     # join both files by student id
-    ro=$2
-    sorted_roster=$(sort -t',' -k1,1 "$roster")
-    student_grades="$(echo "$sorted_roster" | join -t',' -1 1 -2 1 -a 1 -a 2 - "$ro")"
+    student_grades="$( join -t',' -1 1 -2 1 -a 1 -a 2 <(sort -t',' -k1,1 "$roster") <(sort -t',' -k1,1 -))"
 fi;
-
 
 student_grades="$(echo "$student_grades" | sort -t',' -n -r -k4 -)"
 students_with_grades="$(echo "$student_grades" | grep -E '^[^,]+,[^,]+,[^,]+,[0-9]+$' - | cut -d ',' -f 3-4)"
